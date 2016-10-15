@@ -62,7 +62,9 @@ class Default(object):
 
         self.__options = self.__vim.current.buffer.options
         self.__options['buftype'] = 'nofile'
-        self.__options['filetype'] = 'denite'
+        # self.__options['filetype'] = 'denite'
+        # must use command to update syntax highlight
+        self.__vim.command('set ft=denite')
         self.__options['swapfile'] = False
 
         self.__window_options = self.__vim.current.window.options
@@ -130,7 +132,14 @@ class Default(object):
         context['input'] += self.__input_after
         self.update_buffer(context)
         self.update_prompt(context)
+        self.update_syntax(context['input'])
         self.__win_cursor = 1
+
+    def update_syntax(self, input_str):
+        self.__vim.command('silent! syntax clear deniteCandidateInputKeyword')
+        pattern = '.\{-}'.join(input_str)
+        if pattern:
+            self.__vim.command('syntax match deniteCandidateInputKeyword /{}/'.format(pattern))
 
     def input_loop(self, context):
         self.__input_before = context.get('input', '')
