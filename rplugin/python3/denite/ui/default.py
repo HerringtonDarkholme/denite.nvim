@@ -32,7 +32,7 @@ class Default(object):
                 context['input'] = ''
             context['ignorecase'] = 1
             context['path'] = ''
-            context['winheight'] = 20
+            context['winheight'] = 10
             self.__mappings = self.__vim.eval(
                 'g:denite#_default_mappings')['_'].copy()
             self.__mappings.update(context['custom']['map']['_'])
@@ -94,7 +94,7 @@ class Default(object):
 
         del self.__vim.current.buffer[:]
         self.__vim.current.buffer.append(
-            [x['word'] for x in
+            [' ' + x['word'] for x in
              self.__candidates[self.__cursor:
                                self.__cursor + context['winheight']]])
         del self.__vim.current.buffer[0]
